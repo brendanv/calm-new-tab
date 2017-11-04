@@ -1,4 +1,5 @@
 import localForage from 'localforage';
+import LZString from 'lz-string';
 import moment from 'moment';
 
 const defaultImg = 'https://c2.staticflickr.com/4/3712/10194610465_1e3d7c6d29_b.jpg';
@@ -10,7 +11,7 @@ async function initPage() {
   const val = await localForage.getItem('cachedImg');
   if (val != null) {
     console.log(`Loaded dataURL from cache. ${val.length} characters.`);
-    addBackgroundWithSrc(val, false);
+    addBackgroundWithSrc(LZString.decompressFromUTF16(val), false);
   } else {
     addBackgroundWithSrc(defaultImg, true);
   }
@@ -34,10 +35,13 @@ async function cacheImage() {
   canvas.width = img.naturalWidth;
   canvas.height = img.naturalHeight;
   canvas.getContext('2d').drawImage(img, 0, 0);
-  const dataURL = canvas.toDataURL('image/png');
 
   try {
-    const val = await localForage.setItem('cachedImg', dataURL);
+    await localForage.clear();
+    const val = await localForage.setItem(
+      'cachedImg',
+      LZString.compressToUTF16(canvas.toDataURL('image/png')),
+    );
     console.log(`Cached image dataURL. ${val.length} characters.`);
   } catch (e) {
     console.error(e);

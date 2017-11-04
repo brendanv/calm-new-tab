@@ -12,6 +12,7 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "localforage": "^1.5.3",
+    "lz-string": "^1.4.4",
     "moment": "^2.19.1"
   },
   "scripts": {
