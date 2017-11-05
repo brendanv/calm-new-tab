@@ -5,12 +5,17 @@ import LZString from 'lz-string';
 
 const STORAGE_KEY = 'cachedImg';
 
-async function saveToCache(dataUrl: string) {
+export type CachedSrc = {
+  dataUrl: string,
+  cachedTime: number,
+};
+
+async function saveToCache(data: CachedSrc) {
   try {
     await localForage.clear();
     const val = await localForage.setItem(
       STORAGE_KEY,
-      LZString.compressToUTF16(dataUrl),
+      LZString.compressToUTF16(JSON.stringify(data)),
     );
     console.log(`Cached image dataURL. ${val.length} characters.`);
   } catch (e) {
@@ -18,12 +23,12 @@ async function saveToCache(dataUrl: string) {
   }
 }
 
-async function getDataURLFromCache(): Promise<?string> {
+async function getDataURLFromCache(): Promise<?CachedSrc> {
   try {
     const val = await localForage.getItem(STORAGE_KEY);
     if (val != null) {
       console.log(`Loaded dataURL from cache. ${val.length} characters.`);
-      return LZString.decompressFromUTF16(val);
+      return JSON.parse(LZString.decompressFromUTF16(val));
     }
   } catch (e) {
     console.error(e);

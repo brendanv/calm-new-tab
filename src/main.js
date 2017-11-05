@@ -1,8 +1,11 @@
 // @flow
+import type {CachedSrc} from './cachingShared';
 
 import moment from 'moment';
 import {getRandomPhotoURL} from './flickr';
 import {getDataURLFromCache, saveToCache} from './cachingShared';
+
+const PHOTO_TTL = 24 * 60 * 60 * 1000; // 1 day in milliseconds
 
 let cachingWorker = null;
 if (window.Worker) {
@@ -18,10 +21,14 @@ async function initPage() {
 
   if (cachingWorker != null) {
     cachingWorker.onmessage = async function(val) {
-      if (val.data == null) {
+      const data = ((val.data: any): ?CachedSrc);
+      if (data == null) {
+        await addNewBackground();
+      } else if (Date.now() - PHOTO_TTL > data.cachedTime) {
+        console.log('Cached photo is more than one day old. Refreshing.');
         await addNewBackground();
       } else {
-        setBackgroundWithSrc(String(val.data), false);
+        setBackgroundWithSrc(data.dataUrl, false);
       }
     };
     cachingWorker.postMessage(['retrieve']);
@@ -56,9 +63,15 @@ async function cacheImage() {
   canvas.getContext('2d').drawImage(img, 0, 0);
 
   if (cachingWorker != null) {
-    cachingWorker.postMessage(['cache', canvas.toDataURL('image/png')]);
+    cachingWorker.postMessage(['cache', {
+      dataUrl: canvas.toDataURL('image/png'),
+      cachedTime: Date.now(),
+    }]);
   } else {
-    await saveToCache(canvas.toDataURL('image/png'));
+    await saveToCache({
+      dataUrl: canvas.toDataURL('image/png'),
+      cachedTime: Date.now(),
+    });
   }
 }
 
