@@ -1,8 +1,6 @@
 import moment from 'moment';
-
+import {getRandomPhotoURL} from './flickr';
 import {getDataURLFromCache, saveToCache} from './cachingShared';
-
-const defaultImg = 'https://c2.staticflickr.com/4/3712/10194610465_1e3d7c6d29_b.jpg';
 
 let cachingWorker = null;
 if (window.Worker) {
@@ -17,14 +15,17 @@ async function initPage() {
   window.setInterval(updateTime, 1000);
 
   if (cachingWorker != null) {
-    cachingWorker.onmessage = (val) => {
-      val.data == null
-        ? addBackgroundWithSrc(defaultImg, true)
-        : addBackgroundWithSrc(val.data, false);
-    }
+    cachingWorker.onmessage = async function(val) {
+      if (val.data == null) {
+        await addNewBackground();
+      } else {
+        addBackgroundWithSrc(val.data, false);
+      }
+    };
     cachingWorker.postMessage(['retrieve']);
   } else {
-    addBackgroundWithSrc(defaultImg, true);
+    // TODO: this should attempt to load from cache on the main thread
+    await addNewBackground();
   }
 }
 
@@ -52,6 +53,15 @@ async function cacheImage() {
   } else {
     await saveToCache(canvas.toDataURL('image/png'));
   }
+}
+
+async function addNewBackground() {
+  const newURL = await getRandomPhotoURL();
+  if (newURL == null) {
+    console.error('unable to fetch new photo url');
+    return;
+  }
+  addBackgroundWithSrc(newURL, true);
 }
 
 function addBackgroundWithSrc(src, isRemote) {
