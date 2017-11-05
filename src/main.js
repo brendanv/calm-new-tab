@@ -1,17 +1,28 @@
-import localForage from 'localforage';
-import LZString from 'lz-string';
 import moment from 'moment';
 
+import {getDataURLFromCache, saveToCache} from './cachingShared';
+
 const defaultImg = 'https://c2.staticflickr.com/4/3712/10194610465_1e3d7c6d29_b.jpg';
+
+let cachingWorker = null;
+if (window.Worker) {
+  console.log('Initializing web worker');
+  cachingWorker = new Worker('build/worker.js');
+} else {
+  console.warn('Unable to initialize web worker');
+}
 
 async function initPage() {
   updateTime();
   window.setInterval(updateTime, 1000);
 
-  const val = await localForage.getItem('cachedImg');
-  if (val != null) {
-    console.log(`Loaded dataURL from cache. ${val.length} characters.`);
-    addBackgroundWithSrc(LZString.decompressFromUTF16(val), false);
+  if (cachingWorker != null) {
+    cachingWorker.onmessage = (val) => {
+      val.data == null
+        ? addBackgroundWithSrc(defaultImg, true)
+        : addBackgroundWithSrc(val.data, false);
+    }
+    cachingWorker.postMessage(['retrieve']);
   } else {
     addBackgroundWithSrc(defaultImg, true);
   }
@@ -36,15 +47,10 @@ async function cacheImage() {
   canvas.height = img.naturalHeight;
   canvas.getContext('2d').drawImage(img, 0, 0);
 
-  try {
-    await localForage.clear();
-    const val = await localForage.setItem(
-      'cachedImg',
-      LZString.compressToUTF16(canvas.toDataURL('image/png')),
-    );
-    console.log(`Cached image dataURL. ${val.length} characters.`);
-  } catch (e) {
-    console.error(e);
+  if (cachingWorker != null) {
+    cachingWorker.postMessage(['cache', canvas.toDataURL('image/png')]);
+  } else {
+    await saveToCache(canvas.toDataURL('image/png'));
   }
 }
 

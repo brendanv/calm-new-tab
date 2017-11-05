@@ -1,7 +1,10 @@
 module.exports = {
-  entry: ['babel-polyfill', './src/main.js'],
+  entry: {
+    'bundle': ['babel-polyfill', './src/main.js'],
+    'worker': ['babel-polyfill', './src/worker.js'],
+  },
   output: {
-    filename: 'build/bundle.js'
+    filename: 'build/[name].js'
   },
 	module: {
     rules: [
