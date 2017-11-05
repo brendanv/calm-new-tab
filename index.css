@@ -37,6 +37,22 @@ body {
   z-index: 0;
 }
 
+#photoCover {
+  background-color: white;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+  opactiy: 1;
+  transition: opacity 0.5s;
+}
+
+#photoCover.hidden {
+  opacity: 0;
+}
+
 .photo > img {
   height: 100%;
   object-fit: cover;

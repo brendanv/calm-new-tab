@@ -73,7 +73,13 @@ function addBackgroundWithSrc(src, isRemote) {
   img.id = 'bgPhoto';
   if (isRemote) {
     img.crossOrigin = 'anonymous';
-    img.onload = cacheImage;
+  }
+  img.onload = async function() {
+    const cover = document.getElementById('photoCover');
+    cover.classList.add('hidden');
+    if (isRemote) {
+      await cacheImage();
+    }
   }
 
   const wrapper = document.querySelector('.photo');
