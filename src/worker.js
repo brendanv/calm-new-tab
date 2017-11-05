@@ -1,4 +1,8 @@
+// @flow
+
 import {getDataURLFromCache, saveToCache} from './cachingShared';
+
+declare var self: DedicatedWorkerGlobalScope;
 
 onmessage = async function(message) {
   const {data} = message;
@@ -12,7 +16,7 @@ onmessage = async function(message) {
     await saveToCache(data[1]);
   } else if (data[0] === 'retrieve') {
     const val = await getDataURLFromCache();
-    postMessage(val);
+    self.postMessage(val);
   }
 }
 

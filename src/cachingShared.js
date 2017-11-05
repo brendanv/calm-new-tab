@@ -1,9 +1,11 @@
+// @flow
+
 import localForage from 'localforage';
 import LZString from 'lz-string';
 
 const STORAGE_KEY = 'cachedImg';
 
-async function saveToCache(dataUrl) {
+async function saveToCache(dataUrl: string) {
   try {
     await localForage.clear();
     const val = await localForage.setItem(
@@ -16,7 +18,7 @@ async function saveToCache(dataUrl) {
   }
 }
 
-async function getDataURLFromCache() {
+async function getDataURLFromCache(): Promise<?string> {
   try {
     const val = await localForage.getItem(STORAGE_KEY);
     if (val != null) {

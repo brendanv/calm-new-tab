@@ -1,3 +1,5 @@
+// @flow
+
 import moment from 'moment';
 import {getRandomPhotoURL} from './flickr';
 import {getDataURLFromCache, saveToCache} from './cachingShared';
@@ -19,7 +21,7 @@ async function initPage() {
       if (val.data == null) {
         await addNewBackground();
       } else {
-        addBackgroundWithSrc(val.data, false);
+        setBackgroundWithSrc(String(val.data), false);
       }
     };
     cachingWorker.postMessage(['retrieve']);
@@ -32,8 +34,9 @@ async function initPage() {
 let timeStr = null;
 function updateTime() {
   const currTime = moment().format('HH:mm');
-  if (currTime !== timeStr) {
-    document.getElementById('time').textContent = currTime;
+  const timeElem = document.getElementById('time');
+  if (timeElem != null && currTime !== timeStr) {
+    timeElem.textContent = currTime;
     timeStr = currTime;
   }
 }
@@ -41,7 +44,11 @@ function updateTime() {
 async function cacheImage() {
   const img = document.getElementById('bgPhoto');
   const canvas = document.createElement('canvas');
-  if (img == null || canvas == null) {
+  if (
+    img == null ||
+    canvas == null ||
+    !(img instanceof HTMLImageElement)
+  ) {
     return;
   }
   canvas.width = img.naturalWidth;
@@ -61,10 +68,10 @@ async function addNewBackground() {
     console.error('unable to fetch new photo url');
     return;
   }
-  addBackgroundWithSrc(newURL, true);
+  setBackgroundWithSrc(newURL, true);
 }
 
-function addBackgroundWithSrc(src, isRemote) {
+function setBackgroundWithSrc(src: string, isRemote: boolean) {
   const img = document.createElement('img');
   if (img == null) {
     return;
@@ -76,7 +83,9 @@ function addBackgroundWithSrc(src, isRemote) {
   }
   img.onload = async function() {
     const cover = document.getElementById('photoCover');
-    cover.classList.add('hidden');
+    if (cover != null) {
+      cover.classList.add('hidden');
+    }
     if (isRemote) {
       await cacheImage();
     }
@@ -85,9 +94,6 @@ function addBackgroundWithSrc(src, isRemote) {
   const wrapper = document.querySelector('.photo');
   if (wrapper == null) {
     return;
-  }
-  while (wrapper.firstChild) {
-    wrapper.firstChild.remove();
   }
   wrapper.appendChild(img);
 }
