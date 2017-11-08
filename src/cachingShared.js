@@ -3,14 +3,11 @@
 import localForage from 'localforage';
 import LZString from 'lz-string';
 
+import type {PhotoData} from './flickr';
+
 const STORAGE_KEY = 'cachedImg';
 
-export type CachedSrc = {
-  dataUrl: string,
-  cachedTime: number,
-};
-
-async function saveToCache(data: CachedSrc) {
+async function saveToCache(data: PhotoData) {
   try {
     await localForage.clear();
     const val = await localForage.setItem(
@@ -23,7 +20,7 @@ async function saveToCache(data: CachedSrc) {
   }
 }
 
-async function getDataURLFromCache(): Promise<?CachedSrc> {
+async function getDataURLFromCache(): Promise<?PhotoData> {
   try {
     const val = await localForage.getItem(STORAGE_KEY);
     if (val != null) {

@@ -4,7 +4,16 @@ const groupId = '52240257802%40N01'; // Long Exposure
 const perPage = 50;
 const base = 'https://api.flickr.com/services/rest/?method=flickr.groups.pools.getPhotos'
 
-async function getRandomPhotoURL(): Promise<?string> {
+export type PhotoData = {
+  src: string, // Either remote or data URL
+  time: number,
+  owner: string,
+  ownername: string,
+  title: string,
+  id: string,
+};
+
+async function getRandomPhoto(): Promise<?PhotoData> {
   // Assume the group updates frequently so just pick from the most recent...
   const json = await getFlickrPhotosForPage(1);
   const photoArr = json.photos.photo;
@@ -12,7 +21,11 @@ async function getRandomPhotoURL(): Promise<?string> {
     return null;
   }
   const item = photoArr[Math.floor(Math.random() * photoArr.length)];
-  return photoURL(item.farm, item.server, item.id, item.secret, 'h');
+  return {
+    ...item,
+    src: photoURL(item.farm, item.server, item.id, item.secret, 'h'),
+    time: Date.now(),
+  };
 }
 
 async function getFlickrPhotosForPage(pageNum: number): Promise<Object> {
@@ -37,6 +50,11 @@ function photoURL(farm, server, id, secret, size): string {
   return `https://farm${farm}.staticflickr.com/${server}/${id}_${secret}_${size}.jpg`;
 }
 
+function attributionURL(photo: PhotoData): string {
+  return `https://flickr.com/photos/${photo.owner}/${photo.id}`;
+}
+
 module.exports = {
-  getRandomPhotoURL,
+  getRandomPhoto,
+  attributionURL,
 }

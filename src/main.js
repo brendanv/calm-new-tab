@@ -1,8 +1,8 @@
 // @flow
-import type {CachedSrc} from './cachingShared';
+import type {PhotoData} from './flickr';
 
 import moment from 'moment';
-import {getRandomPhotoURL} from './flickr';
+import {getRandomPhoto, attributionURL} from './flickr';
 import {getDataURLFromCache, saveToCache} from './cachingShared';
 
 const PHOTO_TTL = 24 * 60 * 60 * 1000; // 1 day in milliseconds
@@ -21,14 +21,14 @@ async function initPage() {
 
   if (cachingWorker != null) {
     cachingWorker.onmessage = async function(val) {
-      const data = ((val.data: any): ?CachedSrc);
+      const data = ((val.data: any): ?PhotoData);
       if (data == null) {
         await addNewBackground();
-      } else if (Date.now() - PHOTO_TTL > data.cachedTime) {
+      } else if (Date.now() - PHOTO_TTL > data.time) {
         console.log('Cached photo is more than one day old. Refreshing.');
         await addNewBackground();
       } else {
-        setBackgroundWithSrc(data.dataUrl, false);
+        setBackground(data, false);
       }
     };
     cachingWorker.postMessage(['retrieve']);
@@ -62,38 +62,46 @@ async function cacheImage() {
   canvas.height = img.naturalHeight;
   canvas.getContext('2d').drawImage(img, 0, 0);
 
+  const photoData = {
+    src: canvas.toDataURL('image/png'),
+    time: Number(img.dataset.time),
+    owner: img.dataset.owner,
+    ownername: img.dataset.ownername,
+    title: img.dataset.title,
+    id: img.dataset.id,
+  }
+
   if (cachingWorker != null) {
-    cachingWorker.postMessage(['cache', {
-      dataUrl: canvas.toDataURL('image/png'),
-      cachedTime: Date.now(),
-    }]);
+    cachingWorker.postMessage(['cache', photoData]);
   } else {
-    await saveToCache({
-      dataUrl: canvas.toDataURL('image/png'),
-      cachedTime: Date.now(),
-    });
+    await saveToCache(photoData);
   }
 }
 
 async function addNewBackground() {
-  const newURL = await getRandomPhotoURL();
-  if (newURL == null) {
+  const newPhoto = await getRandomPhoto();
+  if (newPhoto == null) {
     console.error('unable to fetch new photo url');
     return;
   }
-  setBackgroundWithSrc(newURL, true);
+  setBackground(newPhoto, true);
 }
 
-function setBackgroundWithSrc(src: string, isRemote: boolean) {
+function setBackground(photo: PhotoData, isRemote: boolean) {
   const img = document.createElement('img');
   if (img == null) {
     return;
   }
-  img.src = src;
+  img.src = photo.src;
   img.id = 'bgPhoto';
   if (isRemote) {
     img.crossOrigin = 'anonymous';
   }
+  img.setAttribute('data-id', photo.id);
+  img.setAttribute('data-owner', photo.owner);
+  img.setAttribute('data-ownername', photo.ownername);
+  img.setAttribute('data-title', photo.title);
+  img.setAttribute('data-time', String(photo.time));
   img.onload = async function() {
     const cover = document.getElementById('photoCover');
     if (cover != null) {
@@ -109,6 +117,19 @@ function setBackgroundWithSrc(src: string, isRemote: boolean) {
     return;
   }
   wrapper.appendChild(img);
+  setAttributionLink(photo);
+}
+
+function setAttributionLink(photoData: PhotoData) {
+  const attr = document.getElementById('attribution');
+  const link = document.createElement('a');
+  if (attr == null || link == null) {
+    return;
+  }
+
+  link.appendChild(document.createTextNode(`Photo by ${photoData.ownername}`));
+  link.href = attributionURL(photoData);
+  attr.appendChild(link);
 }
 
 window.onload = initPage;

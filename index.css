@@ -59,4 +59,20 @@ body {
   width: 100%;
 }
 
+#attribution {
+  padding: 10px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+#attribution a {
+  color: white;
+  text-decoration: none;
+}
+
+#attribution a:hover {
+  text-decoration: underline white;
+}
+
 
