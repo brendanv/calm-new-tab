@@ -17,7 +17,8 @@
     "babel-polyfill": "^6.26.0",
     "localforage": "^1.5.3",
     "lz-string": "^1.4.4",
-    "moment": "^2.19.1"
+    "moment": "^2.19.1",
+    "unsplash-js": "^4.7.0"
   },
   "scripts": {
     "watch": "webpack --progress --watch",

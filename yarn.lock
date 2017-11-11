@@ -1339,6 +1339,10 @@ form-data@~2.1.1:
     combined-stream "^1.0.5"
     mime-types "^2.1.12"
 
+form-urlencoded@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/form-urlencoded/-/form-urlencoded-1.2.0.tgz#16ce2cafa76d2e48b9e513ab723228aea5993396"
+
 fs-readdir-recursive@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/fs-readdir-recursive/-/fs-readdir-recursive-1.0.0.tgz#8cd1745c8b4f8a29c8caec392476921ba195f560"
@@ -2708,6 +2712,13 @@ unreachable-branch-transform@^0.3.0:
     esmangle-evaluator "^1.0.0"
     recast "^0.10.1"
     through2 "^0.6.2"
+
+unsplash-js@^4.7.0:
+  version "4.7.0"
+  resolved "https://registry.yarnpkg.com/unsplash-js/-/unsplash-js-4.7.0.tgz#975528be12a8f556a3f3e093e4dd5b55300ac85e"
+  dependencies:
+    form-urlencoded "1.2.0"
+    querystring "0.2.0"
 
 url@^0.11.0:
   version "0.11.0"

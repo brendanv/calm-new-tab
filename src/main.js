@@ -1,9 +1,10 @@
 // @flow
-import type {PhotoData} from './flickr';
+import type {PhotoData} from './unsplash';
 
 import moment from 'moment';
-import {getRandomPhoto, attributionURL} from './flickr';
+import {getRandomPhoto, utmify} from './unsplash';
 import {getDataURLFromCache, saveToCache} from './cachingShared';
+import Unsplash, {toJson} from 'unsplash-js';
 
 const PHOTO_TTL = 24 * 60 * 60 * 1000; // 1 day in milliseconds
 
@@ -65,10 +66,8 @@ async function cacheImage() {
   const photoData = {
     src: canvas.toDataURL('image/png'),
     time: Number(img.dataset.time),
-    owner: img.dataset.owner,
-    ownername: img.dataset.ownername,
-    title: img.dataset.title,
-    id: img.dataset.id,
+    ownerName: img.dataset.owner,
+    ownerLink: img.dataset.ownerUrl,
   }
 
   if (cachingWorker != null) {
@@ -97,10 +96,8 @@ function setBackground(photo: PhotoData, isRemote: boolean) {
   if (isRemote) {
     img.crossOrigin = 'anonymous';
   }
-  img.setAttribute('data-id', photo.id);
-  img.setAttribute('data-owner', photo.owner);
-  img.setAttribute('data-ownername', photo.ownername);
-  img.setAttribute('data-title', photo.title);
+  img.setAttribute('data-owner', photo.ownerName);
+  img.setAttribute('data-ownerUrl', photo.ownerLink);
   img.setAttribute('data-time', String(photo.time));
   img.onload = async function() {
     const cover = document.getElementById('photoCover');
@@ -122,14 +119,22 @@ function setBackground(photo: PhotoData, isRemote: boolean) {
 
 function setAttributionLink(photoData: PhotoData) {
   const attr = document.getElementById('attribution');
-  const link = document.createElement('a');
-  if (attr == null || link == null) {
+  const ownerLink = document.createElement('a');
+  const unsplashLink = document.createElement('a');
+  if (attr == null || ownerLink == null || unsplashLink == null) {
     return;
   }
 
-  link.appendChild(document.createTextNode(`Photo by ${photoData.ownername}`));
-  link.href = attributionURL(photoData);
-  attr.appendChild(link);
+  ownerLink.appendChild(document.createTextNode(photoData.ownerName));
+  ownerLink.href = utmify(photoData.ownerLink);
+
+  unsplashLink.appendChild(document.createTextNode('Unsplash'));
+  unsplashLink.href = utmify('https://unsplash.com');
+
+  attr.appendChild(document.createTextNode('Photo by '));
+  attr.appendChild(ownerLink);
+  attr.appendChild(document.createTextNode(' / '));
+  attr.appendChild(unsplashLink);
 }
 
 window.onload = initPage;

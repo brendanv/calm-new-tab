@@ -3,7 +3,7 @@
 import localForage from 'localforage';
 import LZString from 'lz-string';
 
-import type {PhotoData} from './flickr';
+import type {PhotoData} from './unsplash';
 
 const STORAGE_KEY = 'cachedImg';
 
