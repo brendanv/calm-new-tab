@@ -67,8 +67,8 @@ async function cacheImage() {
     src: canvas.toDataURL('image/png'),
     time: Number(img.dataset.time),
     ownerName: img.dataset.owner,
-    ownerLink: img.dataset.ownerUrl,
-  }
+    ownerLink: img.dataset.ownerurl,
+  };
 
   if (cachingWorker != null) {
     cachingWorker.postMessage(['cache', photoData]);
@@ -97,7 +97,7 @@ function setBackground(photo: PhotoData, isRemote: boolean) {
     img.crossOrigin = 'anonymous';
   }
   img.setAttribute('data-owner', photo.ownerName);
-  img.setAttribute('data-ownerUrl', photo.ownerLink);
+  img.setAttribute('data-ownerurl', photo.ownerLink);
   img.setAttribute('data-time', String(photo.time));
   img.onload = async function() {
     const body = document.body;
