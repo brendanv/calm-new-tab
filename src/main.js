@@ -47,7 +47,23 @@ function updateTime() {
   if (timeElem != null && currTime !== timeStr && dateElem != null) {
     timeElem.textContent = currTime;
     timeStr = currTime;
-    dateElem.textContent = moment().format('dddd, MMMM Do');
+
+    // We want something similar to LLLL, but without the time.
+    dateElem.textContent = moment().format(
+      moment.localeData().longDateFormat('LLLL').replace(
+        // Remove everything except for: day of week, date, month name, commas
+        /[^dDo,M\s]/g,
+        '',
+      ).replace(
+        // Trim any duplicate whitespace into a single space
+        /\s+/g,
+        ' ',
+      ).replace(
+        // Trim trailing whitespace or comma characters
+        /[\s,]+$/,
+        ''
+      ),
+    );
   }
 }
 
