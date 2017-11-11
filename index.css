@@ -13,20 +13,35 @@ body.hidden {
   opacity: 0;
 }
 
-.timeContainer {
+.flexContainer {
   height: 100%;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
   font-family: sans-serif;
+}
+
+.text {
+  color: white;
+  text-decoration: none;
   text-shadow: 0 0 10px black;
+}
+
+.timeContainer {
+  padding-bottom: 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 #time {
   font-size: 10em;
-  padding-bottom: 10%;
+}
+
+#date {
+  font-size: 2.5em;
 }
 
 .overlay {
@@ -54,12 +69,6 @@ body.hidden {
   position: absolute;
   right: 0;
   bottom: 0;
-  color: white;
-}
-
-#attribution a {
-  color: white;
-  text-decoration: none;
 }
 
 #attribution a:hover {

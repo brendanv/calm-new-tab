@@ -43,9 +43,11 @@ let timeStr = null;
 function updateTime() {
   const currTime = moment().format('HH:mm');
   const timeElem = document.getElementById('time');
-  if (timeElem != null && currTime !== timeStr) {
+  const dateElem = document.getElementById('date');
+  if (timeElem != null && currTime !== timeStr && dateElem != null) {
     timeElem.textContent = currTime;
     timeStr = currTime;
+    dateElem.textContent = moment().format('dddd, MMMM Do');
   }
 }
 
@@ -127,9 +129,11 @@ function setAttributionLink(photoData: PhotoData) {
 
   ownerLink.appendChild(document.createTextNode(photoData.ownerName));
   ownerLink.href = utmify(photoData.ownerLink);
+  ownerLink.classList.add('text');
 
   unsplashLink.appendChild(document.createTextNode('Unsplash'));
   unsplashLink.href = utmify('https://unsplash.com');
+  unsplashLink.classList.add('text');
 
   attr.appendChild(document.createTextNode('Photo by '));
   attr.appendChild(ownerLink);
