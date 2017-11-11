@@ -2,9 +2,15 @@ html,
 body {
   height: 100%;
   overflow: hidden;
+  opacity: 1;
   margin: 0;
   padding: 0;
   width: 100%;
+  transition: opacity 0.5s;
+}
+
+body.hidden {
+  opacity: 0;
 }
 
 .timeContainer {
@@ -35,22 +41,6 @@ body {
   object-fit: cover;
   width: 100%;
   z-index: 0;
-}
-
-#photoCover {
-  background-color: white;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 2;
-  opactiy: 1;
-  transition: opacity 0.5s;
-}
-
-#photoCover.hidden {
-  opacity: 0;
 }
 
 .photo > img {

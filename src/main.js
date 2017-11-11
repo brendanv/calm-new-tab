@@ -100,9 +100,9 @@ function setBackground(photo: PhotoData, isRemote: boolean) {
   img.setAttribute('data-ownerUrl', photo.ownerLink);
   img.setAttribute('data-time', String(photo.time));
   img.onload = async function() {
-    const cover = document.getElementById('photoCover');
-    if (cover != null) {
-      cover.classList.add('hidden');
+    const body = document.body;
+    if (body != null) {
+      body.classList.remove('hidden');
     }
     if (isRemote) {
       await cacheImage();
