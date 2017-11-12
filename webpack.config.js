@@ -1,10 +1,18 @@
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
   entry: {
-    'bundle': ['babel-polyfill', './src/main.js'],
+    'bundle': ['babel-polyfill', './src/js/main.js'],
   },
   output: {
-    filename: 'build/[name].js'
+    filename: 'build/js/[name].js'
   },
+  plugins: [
+    new CopyWebpackPlugin([
+      { from: 'manifest.json', to: 'build/manifest.json' },
+      { from: 'src/index.html', to: 'build/index.html' },
+      { from: 'src/css', to: 'build/css' }
+    ])
+  ],
 	module: {
     rules: [
       {
