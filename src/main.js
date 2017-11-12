@@ -146,10 +146,12 @@ function setAttributionLink(photoData: PhotoData) {
   ownerLink.appendChild(document.createTextNode(photoData.ownerName));
   ownerLink.href = utmify(photoData.ownerLink);
   ownerLink.classList.add('text');
+  ownerLink.target = '_blank';
 
   unsplashLink.appendChild(document.createTextNode('Unsplash'));
   unsplashLink.href = utmify('https://unsplash.com');
   unsplashLink.classList.add('text');
+  unsplashLink.target = '_blank';
 
   attr.appendChild(document.createTextNode('Photo by '));
   attr.appendChild(ownerLink);
