@@ -1,7 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "My New Tab",
+  "name": "Calm New Tab",
   "version": "0.1",
+  "description": "Simple extension to replace your new tab page with a relaxing photo.",
 
   "chrome_url_overrides": {
     "newtab": "index.html"
