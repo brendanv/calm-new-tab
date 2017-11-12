@@ -13,7 +13,7 @@ async function initPage() {
   window.setInterval(updateTime, 1000);
 
   const photoData = await getPhotoDataFromCache();
-  if (photoData != null) {
+  if (photoData != null && Date.now() - photoData.time < PHOTO_TTL) {
     setBackground(photoData, false);
   } else {
     await addNewBackground();
