@@ -1,5 +1,6 @@
 // @flow
 import Unsplash, {toJson} from 'unsplash-js';
+import {APPLICATION_ID, SECRET, CALLBACK_URL} from './API_KEYS';
 
 export type PhotoData = {
   src: string, // Either remote or data URL
@@ -10,9 +11,9 @@ export type PhotoData = {
 
 // I wish I knew a way to keep this secret...
 const unsplash = new Unsplash({
-  applicationId: 'app_id',
-  secret: 'secret',
-  callbackUrl: 'callback',
+  applicationId: APPLICATION_ID,
+  secret: SECRET,
+  callbackUrl: CALLBACK_URL,
 });
 
 async function getRandomPhoto(): Promise<?PhotoData> {

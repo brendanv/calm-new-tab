@@ -1,0 +1,7 @@
+// For development, copy this file to API_KEYS.js and replace the mock
+// values with actual credentials from unsplash.
+module.exports = {
+  APPLICATION_ID: 'app_id',
+  SECRET: 'secret',
+  CALLBACK_URL: 'callback',
+};
