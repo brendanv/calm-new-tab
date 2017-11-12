@@ -3,38 +3,19 @@ import type {PhotoData} from './unsplash';
 
 import moment from 'moment';
 import {getRandomPhoto, utmify} from './unsplash';
-import {getDataURLFromCache, saveToCache} from './cachingShared';
+import {getPhotoDataFromCache, saveToCache} from './cachingShared';
 import Unsplash, {toJson} from 'unsplash-js';
 
 const PHOTO_TTL = 24 * 60 * 60 * 1000; // 1 day in milliseconds
-
-let cachingWorker = null;
-if (window.Worker) {
-  console.log('Initializing web worker');
-  cachingWorker = new Worker('build/worker.js');
-} else {
-  console.warn('Unable to initialize web worker');
-}
 
 async function initPage() {
   updateTime();
   window.setInterval(updateTime, 1000);
 
-  if (cachingWorker != null) {
-    cachingWorker.onmessage = async function(val) {
-      const data = ((val.data: any): ?PhotoData);
-      if (data == null) {
-        await addNewBackground();
-      } else if (Date.now() - PHOTO_TTL > data.time) {
-        console.log('Cached photo is more than one day old. Refreshing.');
-        await addNewBackground();
-      } else {
-        setBackground(data, false);
-      }
-    };
-    cachingWorker.postMessage(['retrieve']);
+  const photoData = await getPhotoDataFromCache();
+  if (photoData != null) {
+    setBackground(photoData, false);
   } else {
-    // TODO: this should attempt to load from cache on the main thread
     await addNewBackground();
   }
 }
@@ -88,11 +69,7 @@ async function cacheImage() {
     ownerLink: img.dataset.ownerurl,
   };
 
-  if (cachingWorker != null) {
-    cachingWorker.postMessage(['cache', photoData]);
-  } else {
-    await saveToCache(photoData);
-  }
+  await saveToCache(photoData);
 }
 
 async function addNewBackground() {
