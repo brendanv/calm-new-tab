@@ -19,10 +19,12 @@ async function getRandomPhoto(): Promise<?PhotoData> {
   const result = await unsplash.photos.getRandomPhoto({
     collections: ['1379465'],
     orientation: 'landscape',
+    width: window.screen.width,
+    height: window.screen.height,
   });
   const json = await toJson(result);
   return {
-    src: json.urls.regular, // TODO: maybe use a different size?
+    src: json.urls.custom,
     time: Date.now(),
     ownerName: json.user.name,
     ownerLink: json.user.links.html,
