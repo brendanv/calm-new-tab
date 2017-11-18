@@ -10,12 +10,7 @@ const cache = localForage.createInstance({
 });
 
 async function saveToCache(data: PhotoData) {
-  try {
-    await cache.clear();
-    const val = await cache.setItem(STORAGE_KEY, data);
-  } catch (e) {
-    console.error(e);
-  }
+  const val = await cache.setItem(STORAGE_KEY, data);
 }
 
 async function getPhotoDataFromCache(): Promise<?PhotoData> {

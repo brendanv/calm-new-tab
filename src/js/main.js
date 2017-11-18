@@ -73,7 +73,13 @@ async function cacheImage() {
     ownerLink: img.dataset.ownerurl,
   };
 
-  await saveToCache(photoData);
+  try {
+    await saveToCache(photoData);
+  } catch (e) {
+    console.log('Falling back to cache remote url.')
+    photoData.src = img.src;
+    await saveToCache(photoData);
+  }
 }
 
 async function addNewBackground() {
