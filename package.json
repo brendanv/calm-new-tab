@@ -9,7 +9,9 @@
     "babel-preset-env": "^1.6.1",
     "webpack": "^3.8.1"
   },
-  "dependencies": {},
+  "dependencies": {
+    "moment": "^2.19.1"
+  },
   "scripts": {
     "watch": "webpack --progress --watch",
     "build": "webpack --progress -p"
