@@ -1,16 +1,27 @@
+var path = require('path');
+
+var CleanWebpackPlugin = require('clean-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+
 module.exports = {
+  context: path.resolve(__dirname, 'src'),
   entry: {
-    'bundle': ['babel-polyfill', './src/js/main.js'],
+    'main': ['babel-polyfill', './js/main.js'],
   },
   output: {
-    filename: 'build/js/[name].js'
+    path: path.resolve(__dirname, 'build'),
+    filename: './js/[name].bundle.js'
   },
   plugins: [
+    new CleanWebpackPlugin(['build']),
+    new HtmlWebpackPlugin({
+      template: 'index.html',
+      inject: 'head',
+    }),
     new CopyWebpackPlugin([
-      { from: 'manifest.json', to: 'build/manifest.json' },
-      { from: 'src/index.html', to: 'build/index.html' },
-      { from: 'src/css', to: 'build/css' }
+      { from: './manifest.json' },
+      { from: './css', to: './css' }
     ])
   ],
 	module: {
