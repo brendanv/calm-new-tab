@@ -25,13 +25,41 @@ const Photo = styled.img`
   object-fit: cover;
 `;
 
-const BackgroundPhoto = (props: Props) => {
-  const {onImageLoaded, photo: {src}} = props;
-  return (
-    <Wrapper>
-      <Photo src={src} onLoad={onImageLoaded} />
-    </Wrapper>
-  );
-};
+export default class BackgroundPhoto extends React.Component<Props> {
+  getPhotoData(): ?PhotoData {
+    const img = this.photoNode;
+    const canvas = document.createElement('canvas');
+    if (
+      img == null ||
+      canvas == null ||
+      !(img instanceof HTMLImageElement)
+    ) {
+      return null;
+    }
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    canvas.getContext('2d').drawImage(img, 0, 0);
 
-export default BackgroundPhoto;
+    return {
+      type: 'local',
+      src: canvas.toDataURL('image/png'),
+      time: Date.now(),
+      ownerName: this.props.photo.ownerName,
+      ownerLink: this.props.photo.ownerLink,
+    };
+  }
+
+  render() {
+    const {onImageLoaded, photo: {src}} = this.props;
+    return (
+      <Wrapper>
+        <Photo 
+          crossOrigin={this.props.photo.type === 'remote' ? 'anonymous' : undefined}
+          innerRef={(elem) => {this.photoNode = elem;}} 
+          src={src} 
+          onLoad={onImageLoaded} 
+        />
+      </Wrapper>
+    );
+  }
+};

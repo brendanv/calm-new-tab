@@ -55,10 +55,18 @@ export default class App extends React.Component {
 
   _onCacheImage = () => {
     const {photoData} = this.state;
-    if (photoData == null) {
-      return;
+    if (photoData.type === 'remote' && this.photoNode != null) {
+      const newData = this.photoNode.getPhotoData();
+      if (newData != null) {
+        try {
+          saveToCache(newData);
+        } catch (e) {
+          saveToCache(photoData);
+        }
+      } else {
+        saveToCache(photoData);
+      }
     }
-    saveToCache(photoData);
   }
 
   render() {
@@ -68,7 +76,11 @@ export default class App extends React.Component {
     }
     return (
       <Wrapper visible={visible}>
-        <BackgroundPhoto onImageLoaded={this.onImageLoaded} photo={photoData} />
+        <BackgroundPhoto
+          ref={(elem) => {this.photoNode = elem;}}
+          onImageLoaded={this.onImageLoaded}
+          photo={photoData}
+        />
         <Time />
         <Attribution photo={photoData} />
       </Wrapper>
