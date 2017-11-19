@@ -11,6 +11,16 @@ const OverlayText = Overlay.extend`
   text-decoration: none;
   text-shadow: 0 0 10px black;
   font-size: ${props => props.fontSize};
+
+  > a {
+    color: white;
+    text-decoration: none;
+    text-shadow: 0 0 10px black;
+  }
+
+  > a: hover {
+    text-decoration: underline white;
+  }
 `;
 
 export {

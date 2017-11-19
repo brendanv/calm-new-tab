@@ -2,6 +2,7 @@
 
 import type {PhotoData} from './unsplash';
 
+import Attribution from './Attribution';
 import BackgroundPhoto from './BackgroundPhoto';
 import React from 'react';
 import styled from 'styled-components';
@@ -57,13 +58,14 @@ export default class App extends React.Component {
 
   render() {
     const {photoData, visible} = this.state;
-    const bgPhoto = photoData != null 
-      ? <BackgroundPhoto onImageLoaded={this.onImageLoaded} photo={photoData} />
-      : null;
+    if (photoData == null) {
+      return null;
+    }
     return (
       <Wrapper visible={visible}>
-        {bgPhoto}
+        <BackgroundPhoto onImageLoaded={this.onImageLoaded} photo={photoData} />
         <Time />
+        <Attribution photo={photoData} />
       </Wrapper>
     );
   }
