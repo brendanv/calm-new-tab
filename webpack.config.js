@@ -21,7 +21,6 @@ module.exports = {
     }),
     new CopyWebpackPlugin([
       { from: './manifest.json' },
-      { from: './css', to: './css' }
     ])
   ],
 	module: {

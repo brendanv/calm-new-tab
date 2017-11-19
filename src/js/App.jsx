@@ -21,6 +21,11 @@ const Wrapper = styled.div`
   width: 100%;
   opacity: ${props => props.visible ? 1 : 0};
   transition: opacity 0.5s;
+  font-size: 14px;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 `;
 
 export default class App extends React.Component {
