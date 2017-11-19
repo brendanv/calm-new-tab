@@ -5,6 +5,7 @@ import type {PhotoData} from './unsplash';
 import BackgroundPhoto from './BackgroundPhoto';
 import React from 'react';
 import styled from 'styled-components';
+import Time from './Time';
 
 import {getPhotoDataFromCache, saveToCache} from './cachingShared';
 import {getRandomPhoto} from './unsplash';
@@ -62,7 +63,7 @@ export default class App extends React.Component {
     return (
       <Wrapper visible={visible}>
         {bgPhoto}
-        <div>wat</div>
+        <Time />
       </Wrapper>
     );
   }

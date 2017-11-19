@@ -11,6 +11,11 @@ body {
   transition: opacity 0.5s;
 }
 
+#react-container {
+  width: 100%;
+  height: 100%;
+}
+
 body.hidden {
   opacity: 0;
 }
