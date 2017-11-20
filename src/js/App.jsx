@@ -30,6 +30,8 @@ const Wrapper = styled.div`
   overflow: hidden;
 `;
 
+const CACHE_TTL = 24 * 60 * 60 * 1000;
+
 export default class App extends React.Component<Props, State> {
   photoNode: ?any = null;
 
@@ -43,7 +45,7 @@ export default class App extends React.Component<Props, State> {
 
   async componentDidMount() {
     let photoData = await getPhotoDataFromCache();
-    if (photoData == null) {
+    if (photoData == null || (Date.now() - photoData.time) > CACHE_TTL) {
       photoData = await getRandomPhoto();
       if (photoData != null) {
         this.setState({ photoData });
