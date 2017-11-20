@@ -2,16 +2,21 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link rel="stylesheet" href="css/index.css">
+    <style type="text/css">
+      html,body {
+        height: 100%;
+        overflow: hidden;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #react-container {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
   </head>
-  <body class="hidden">
-    <div class="flexContainer overlay">
-      <div class="timeContainer overlay">
-        <div class="overlay text" id="time"></div>
-        <div class="overlay text" id="date"></div>
-      </div>
-    </div>
-    <div class="overlay text" id="attribution"></div>
-    <div class="photo"></div>
+  <body>
+    <div id="react-container"></div>
   </body>
 </html>

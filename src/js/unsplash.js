@@ -3,6 +3,7 @@ import Unsplash, {toJson} from 'unsplash-js';
 import {APPLICATION_ID, SECRET, CALLBACK_URL} from './API_KEYS';
 
 export type PhotoData = {
+  type: 'remote' | 'local',
   src: string, // Either remote or data URL
   time: number,
   ownerName: string,
@@ -25,6 +26,7 @@ async function getRandomPhoto(): Promise<?PhotoData> {
   });
   const json = await toJson(result);
   return {
+    type: 'remote',
     src: json.urls.custom,
     time: Date.now(),
     ownerName: json.user.name,

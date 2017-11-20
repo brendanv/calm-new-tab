@@ -17,25 +17,28 @@ module.exports = {
     new CleanWebpackPlugin(['build']),
     new HtmlWebpackPlugin({
       template: 'index.html',
-      inject: 'head',
+      inject: 'body',
     }),
     new CopyWebpackPlugin([
       { from: './manifest.json' },
-      { from: './css', to: './css' }
     ])
   ],
 	module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['env']
+            presets: ['env', 'flow', 'react'],
+            plugins: ["transform-object-rest-spread", "transform-class-properties"]
           }
         }
       }
     ]
+  },
+  resolve: {
+    extensions: ['.js', '.jsx']
   }
 };
