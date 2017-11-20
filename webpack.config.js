@@ -8,6 +8,7 @@ module.exports = {
   context: path.resolve(__dirname, 'src'),
   entry: {
     'main': ['babel-polyfill', './js/main.js'],
+    'options': ['babel-polyfill', './js/options.js'],
   },
   output: {
     path: path.resolve(__dirname, 'build'),
@@ -18,6 +19,13 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'index.html',
       inject: 'body',
+      chunks: ['main'],
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'options.html',
+      template: 'options.html',
+      inject: 'body',
+      chunks: ['options'],
     }),
     new CopyWebpackPlugin([
       { from: './manifest.json' },
