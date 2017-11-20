@@ -11,7 +11,9 @@ import Time from './Time';
 import {getPhotoDataFromCache, saveToCache} from './cachingShared';
 import {getRandomPhoto} from './unsplash';
 
-type Props = {
+type Props = {};
+
+type State = {
   photoData: ?PhotoData,
   visible: boolean,
 };
@@ -28,8 +30,10 @@ const Wrapper = styled.div`
   overflow: hidden;
 `;
 
-export default class App extends React.Component {
-  constructor(props) {
+export default class App extends React.Component<Props, State> {
+  photoNode: ?any = null;
+
+  constructor(props: Props) {
     super(props);
     this.state = {
       photoData: null,
@@ -55,8 +59,9 @@ export default class App extends React.Component {
 
   _onCacheImage = () => {
     const {photoData} = this.state;
-    if (photoData.type === 'remote' && this.photoNode != null) {
-      const newData = this.photoNode.getPhotoData();
+    const node = this.photoNode;
+    if (photoData != null && photoData.type === 'remote' && node != null) {
+      const newData = node.getPhotoData();
       if (newData != null) {
         try {
           saveToCache(newData);

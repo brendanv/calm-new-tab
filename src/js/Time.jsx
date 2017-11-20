@@ -5,6 +5,8 @@ import moment from 'moment';
 import React from 'react';
 import styled from 'styled-components';
 
+type Props = {};
+
 type State = {
   timeDisplay: ?string,
   dateDisplay: ?string,
@@ -23,7 +25,7 @@ const TimeContainer = Overlay.withComponent('div').extend`
   padding-bottom: 10vh;
 `;
 
-export default class Time extends React.Component {
+export default class Time extends React.Component<Props, State> {
   _subscription: ?any;
   constructor(props: Props) {
     super(props);

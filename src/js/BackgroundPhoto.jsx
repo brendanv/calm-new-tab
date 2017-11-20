@@ -26,6 +26,8 @@ const Photo = styled.img`
 `;
 
 export default class BackgroundPhoto extends React.Component<Props> {
+  photoNode: ?any = null;
+
   getPhotoData(): ?PhotoData {
     const img = this.photoNode;
     const canvas = document.createElement('canvas');
