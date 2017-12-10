@@ -43,11 +43,10 @@ export default class BackgroundPhoto extends React.Component<Props> {
     canvas.getContext('2d').drawImage(img, 0, 0);
 
     return {
+      ...this.props.photo,
       type: 'local',
       src: canvas.toDataURL('image/png'),
       time: Date.now(),
-      ownerName: this.props.photo.ownerName,
-      ownerLink: this.props.photo.ownerLink,
     };
   }
 

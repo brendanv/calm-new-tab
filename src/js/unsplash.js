@@ -8,6 +8,7 @@ export type PhotoData = {
   time: number,
   ownerName: string,
   ownerLink: string,
+  location: ?string,
 };
 
 // I wish I knew a way to keep this secret...
@@ -31,6 +32,7 @@ async function getRandomPhoto(): Promise<?PhotoData> {
     time: Date.now(),
     ownerName: json.user.name,
     ownerLink: json.user.links.html,
+    location: json.location ? json.location.title : null,
   };
 }
 

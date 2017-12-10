@@ -15,13 +15,15 @@ const AttributionOverlay = Overlay.withComponent('div').extend`
   position: absolute;
   right: 15px;
   bottom: 15px;
+  text-align: right;
 `;
 
 const Attribution = (props: Props) => {
-  const {photo: {ownerName, ownerLink}} = props;
+  const {photo: {location, ownerName, ownerLink}} = props;
   return (
     <AttributionOverlay>
       <OverlayText>
+        {location}{location == null ? null : <br />}
         Photo by <a href={utmify(ownerLink)} target="_blank">{ownerName}</a>{' / '}
         <a href={utmify('https://unsplash.com')} target="_blank">Unsplash</a>
       </OverlayText>
