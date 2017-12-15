@@ -5,7 +5,9 @@ import {Overlay, OverlayText} from './UtilComponents';
 import React from 'react';
 import styled from 'styled-components';
 
-type Props = {};
+type Props = {
+  timeFormat: string,
+};
 
 type State = {
   timeDisplay: ?string,
@@ -36,6 +38,12 @@ export default class Time extends React.Component<Props, State> {
     };
   }
 
+  componentWillReceiveProps(nextProps: Props) {
+    if (nextProps.timeFormat !== this.props.timeFormat) {
+      this._updateTimer(nextProps);
+    }
+  }
+
   componentDidMount() {
     this._updateTimer();
     this._subscription = setInterval(this._updateTimer, 1000);
@@ -53,9 +61,16 @@ export default class Time extends React.Component<Props, State> {
     );
   }
 
-  _updateTimer = () => {
+  _updateTimer = (props?: Props) => {
     const {timeDisplay} = this.state;
-    const currTime = getCurrentTimeDisplay(false);
+    const {timeFormat} = props || this.props;
+    let hour12 = undefined;
+    if (timeFormat === '12hr') {
+      hour12 = true;
+    } else if (timeFormat === '24hr') {
+      hour12 = false;
+    }
+    const currTime = getCurrentTimeDisplay(hour12);
     if (currTime !== timeDisplay) {
       this.setState({
         dateDisplay: getCurrentDateDisplay(),
