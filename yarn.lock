@@ -2110,6 +2110,12 @@ loader-utils@^1.0.2, loader-utils@^1.1.0:
     emojis-list "^2.0.0"
     json5 "^0.5.0"
 
+localforage-webextensionstorage-driver@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/localforage-webextensionstorage-driver/-/localforage-webextensionstorage-driver-1.1.2.tgz#69c0a52f3e4c3f38ecbfa8ba82e0109e3d1fa055"
+  dependencies:
+    babel-runtime "^6.22.0"
+
 localforage@^1.5.3:
   version "1.5.3"
   resolved "https://registry.yarnpkg.com/localforage/-/localforage-1.5.3.tgz#698aa16af1022340b240be9d93192e8af022ff16"

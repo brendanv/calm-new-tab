@@ -1,5 +1,6 @@
 // @flow
 
+import {getAllSettings, saveSettings} from './Settings';
 import {getCurrentDateDisplay, getCurrentTimeDisplay} from './timeFormatting';
 import React from 'react';
 import {RadioGroup, Radio} from 'react-radio-group';
@@ -15,25 +16,15 @@ export default class OptionsApp extends React.Component<{}> {
     timeFormat: 'default',
   };
 
-  componentWillMount() {
-    chrome.storage.sync.get('calmSettings', (value) => {
-      if (value == null) {
-        return;
-      }
-      const raw = value['calmSettings'];
-      if (raw != null && typeof raw === 'string') {
-        const settings = JSON.parse(raw);
-        const newState = {};
-        if (settings.timeFormat) {
-          newState.timeFormat = settings.timeFormat;
-        }
-        this.setState(newState);
-      }
-    });
+  async componentWillMount() {
+    const saved = await getAllSettings();
+    if (saved != null) {
+      this.setState(saved);
+    }
   }
 
   _onSave = (event) => {
-    chrome.storage.sync.set({'calmSettings': JSON.stringify(this.state)});
+    saveSettings(this.state);
     event.preventDefault();
   };
 
