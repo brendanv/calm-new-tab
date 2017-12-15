@@ -1,5 +1,6 @@
 // @flow
 
+import {getCurrentDateDisplay, getCurrentTimeDisplay} from './timeFormatting';
 import {Overlay, OverlayText} from './UtilComponents';
 import React from 'react';
 import styled from 'styled-components';
@@ -54,20 +55,10 @@ export default class Time extends React.Component<Props, State> {
 
   _updateTimer = () => {
     const {timeDisplay} = this.state;
-    const currTime = new Date().toLocaleString(navigator.language, {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    });
+    const currTime = getCurrentTimeDisplay(false);
     if (currTime !== timeDisplay) {
-      const dateDisplay = new Date().toLocaleString(navigator.language, {
-        weekday: 'long',
-        month: 'long',
-        day: 'numeric',
-      });
-
       this.setState({
-        dateDisplay,
+        dateDisplay: getCurrentDateDisplay(),
         timeDisplay: currTime,
       });
     }

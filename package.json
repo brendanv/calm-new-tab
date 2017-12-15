@@ -23,6 +23,7 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "localforage": "^1.5.3",
+    "react-radio-group": "^3.0.2",
     "styled-components": "^2.2.3",
     "unsplash-js": "^4.7.0"
   },

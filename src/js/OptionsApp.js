@@ -1,9 +1,59 @@
 // @flow
 
+import {getCurrentDateDisplay, getCurrentTimeDisplay} from './timeFormatting';
 import React from 'react';
+import {RadioGroup, Radio} from 'react-radio-group';
+
+type Props = {};
+
+type State = {
+  timeFormat: string,
+};
 
 export default class OptionsApp extends React.Component<{}> {
-  render() {
-    return <div>hello world</div>;
+  state = {
+    timeFormat: 'default',
+  };
+
+  componentWillMount() {
+    chrome.storage.sync.get('calmSettings', (value) => {
+      if (value == null) {
+        return;
+      }
+      const raw = value['calmSettings'];
+      if (raw != null && typeof raw === 'string') {
+        const settings = JSON.parse(raw);
+        const newState = {};
+        if (settings.timeFormat) {
+          newState.timeFormat = settings.timeFormat;
+        }
+        this.setState(newState);
+      }
+    });
   }
+
+  _onSave = (event) => {
+    chrome.storage.sync.set({'calmSettings': JSON.stringify(this.state)});
+    event.preventDefault();
+  };
+
+  render() {
+    const {timeFormat} = this.state;
+    return (
+      <form onSubmit={this._onSave}>
+        Preferred Time Format:
+        <RadioGroup name="time" selectedValue={timeFormat} onChange={this._onTimeFormatChange}>
+          <label><Radio value="24hr" />24-hour ({getCurrentTimeDisplay(false)})</label><br />
+          <label><Radio value="12hr" />12-hour ({getCurrentTimeDisplay(true)})</label><br />
+          <label><Radio value="default" />Default</label><br />
+        </RadioGroup>
+        <br />
+        <input type="submit" value="Save" />
+      </form>
+    );
+  }
+
+  _onTimeFormatChange = (timeFormat: string) => {
+    this.setState({ timeFormat });
+  };
 }

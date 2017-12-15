@@ -4,6 +4,12 @@
   "version": "0.1",
   "description": "Simple extension to replace your new tab page with a relaxing photo.",
 
+  "applications": {
+    "gecko": {
+      "id": "calmtab@exampleID"
+    }
+  },
+
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
