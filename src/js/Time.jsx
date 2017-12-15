@@ -22,6 +22,7 @@ const TimeOverlay = Overlay.withComponent('div').extend`
 `;
 
 const TimeContainer = Overlay.withComponent('div').extend`
+  text-align: center;
   padding-bottom: 10vh;
 `;
 
