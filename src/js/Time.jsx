@@ -1,7 +1,6 @@
 // @flow
 
 import {Overlay, OverlayText} from './UtilComponents';
-import moment from 'moment';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -55,24 +54,17 @@ export default class Time extends React.Component<Props, State> {
 
   _updateTimer = () => {
     const {timeDisplay} = this.state;
-    const currTime = moment().format('HH:mm');
+    const currTime = new Date().toLocaleString(navigator.language, {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    });
     if (currTime !== timeDisplay) {
-      // We want something similar to LLLL, but without the time.
-      const dateDisplay = moment().format(
-        moment.localeData().longDateFormat('LLLL').replace(
-          // Remove everything except for: day of week, date, month name, commas
-          /[^dDo,M\s]/g,
-          '',
-        ).replace(
-          // Trim any duplicate whitespace into a single space
-          /\s+/g,
-          ' ',
-        ).replace(
-          // Trim trailing whitespace or comma characters
-          /[\s,]+$/,
-          ''
-        ),
-      );
+      const dateDisplay = new Date().toLocaleString(navigator.language, {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+      });
 
       this.setState({
         dateDisplay,
