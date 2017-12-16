@@ -4,6 +4,7 @@ import type {PhotoData} from './unsplash';
 
 import Attribution from './Attribution';
 import BackgroundPhoto from './BackgroundPhoto';
+import OptionsOverlay from './OptionsOverlay';
 import React from 'react';
 import styled from 'styled-components';
 import Time from './Time';
@@ -118,6 +119,7 @@ export default class App extends React.Component<Props, State> {
         />
         <Time timeFormat={timeFormat} />
         <Attribution photo={photoData} />
+        <OptionsOverlay />
       </Wrapper>
     );
   }
