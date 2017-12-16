@@ -1,5 +1,7 @@
 // @flow
 
+import type {localForageInstance} from 'localforage';
+
 import localForage from 'localforage';
 import syncDriver from 'localforage-webextensionstorage-driver/sync';
 
@@ -7,10 +9,10 @@ const SETTINGS_KEY = 'calmSettings';
 
 let settingsStorage = null;
 
-function waitUntilStorage(): Promise<void> {
+function waitForStorage(): Promise<localForageInstance> {
   return new Promise((resolve, reject) => {
     if (settingsStorage != null) {
-      resolve();
+      resolve(settingsStorage);
     } else {
       localForage
         .defineDriver(syncDriver)
@@ -19,7 +21,7 @@ function waitUntilStorage(): Promise<void> {
           settingsStorage = localForage.createInstance({
             name: 'settings',
           });
-          resolve();
+          resolve(settingsStorage);
         });
     }
   });
@@ -27,13 +29,13 @@ function waitUntilStorage(): Promise<void> {
 
 
 async function saveSettings(settings: {[key: string]: string}): Promise<void> {
-  await waitUntilStorage();
-  await settingsStorage.setItem(SETTINGS_KEY, settings);
+  const storage = await waitForStorage();
+  await storage.setItem(SETTINGS_KEY, settings);
 }
 
 async function getAllSettings(): Promise<?{[key: string]: string}> {
-  await waitUntilStorage();
-  return await settingsStorage.getItem(SETTINGS_KEY);
+  const storage = await waitForStorage();
+  return await storage.getItem(SETTINGS_KEY);
 }
 
 async function getSetting(settingName: string): Promise<?string> {

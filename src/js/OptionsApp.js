@@ -11,7 +11,7 @@ type State = {
   timeFormat: string,
 };
 
-export default class OptionsApp extends React.Component<{}> {
+export default class OptionsApp extends React.Component<Props, State> {
   state = {
     timeFormat: 'default',
   };
@@ -23,7 +23,7 @@ export default class OptionsApp extends React.Component<{}> {
     }
   }
 
-  _onSave = (event) => {
+  _onSave = (event: Event) => {
     saveSettings(this.state);
     event.preventDefault();
   };

@@ -6,7 +6,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 type Props = {
-  timeFormat: string,
+  timeFormat?: ?string,
 };
 
 type State = {

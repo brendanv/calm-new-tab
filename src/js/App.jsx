@@ -50,7 +50,7 @@ export default class App extends React.Component<Props, State> {
 
   async componentWillMount() {
     const timeFormat = await getSetting('timeFormat');
-    const newState = { settingsLoaded: true };
+    const newState = ({ settingsLoaded: true }: {[key: string]: any});
     switch (timeFormat) {
       case '24hr':
         newState.timeFormat = '24hr';
