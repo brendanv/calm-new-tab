@@ -10,12 +10,15 @@ import Time from './Time';
 
 import {getPhotoDataFromCache, saveToCache} from './cachingShared';
 import {getRandomPhoto} from './unsplash';
+import {getSetting} from './Settings';
 
 type Props = {};
 
 type State = {
   photoData: ?PhotoData,
-  visible: boolean,
+  timeFormat: ?string,
+  settingsLoaded: boolean,
+  imageLoaded: boolean,
 };
 
 const Wrapper = styled.div`
@@ -39,8 +42,28 @@ export default class App extends React.Component<Props, State> {
     super(props);
     this.state = {
       photoData: null,
-      visible: false,
+      timeFormat: null,
+      settingsLoaded: false,
+      imageLoaded: false,
     };
+  }
+
+  async componentWillMount() {
+    const timeFormat = await getSetting('timeFormat');
+    const newState = ({ settingsLoaded: true }: {[key: string]: any});
+    switch (timeFormat) {
+      case '24hr':
+        newState.timeFormat = '24hr';
+        break;
+      case '12hr':
+        newState.timeFormat = '12hr';
+        break;
+      case 'default':
+      default:
+        newState.timeFormat = 'default';
+        break;
+    }
+    this.setState(newState);
   }
 
   async componentDidMount() {
@@ -56,7 +79,7 @@ export default class App extends React.Component<Props, State> {
   }
 
   onImageLoaded = () => {
-    this.setState({ visible: true }, this._onCacheImage);
+    this.setState({ imageLoaded: true }, this._onCacheImage);
   };
 
   _onCacheImage = () => {
@@ -77,18 +100,23 @@ export default class App extends React.Component<Props, State> {
   }
 
   render() {
-    const {photoData, visible} = this.state;
+    const {
+      imageLoaded,
+      photoData,
+      settingsLoaded,
+      timeFormat,
+    } = this.state;
     if (photoData == null) {
       return null;
     }
     return (
-      <Wrapper visible={visible}>
+      <Wrapper visible={imageLoaded && settingsLoaded}>
         <BackgroundPhoto
           ref={(elem) => {this.photoNode = elem;}}
           onImageLoaded={this.onImageLoaded}
           photo={photoData}
         />
-        <Time />
+        <Time timeFormat={timeFormat} />
         <Attribution photo={photoData} />
       </Wrapper>
     );
