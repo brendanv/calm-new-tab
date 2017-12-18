@@ -2,6 +2,8 @@
 
 Replace your new tab page with a relaxing photo. No frills, no tracking, open source.
 
+<p align="center"><img src="screenshots/1.png"></p>
+
 ## Development
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
