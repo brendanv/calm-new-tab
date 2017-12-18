@@ -22,3 +22,10 @@ yarn run watch
 
 After the initial build has completed, follow the instructions for loading an extension from the `build/` directory into [Chrome](https://developer.chrome.com/extensions/getstarted#unpacked) or [Firefox](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Temporary_Installation_in_Firefox).
 
+## License
+
+This project is licensed under the terms of the MIT license. See the [LICENSE](./LICENSE.md) file for details.
+
+### Note about license
+
+From @brendanv: I am providing code in this repository to you under an open source license. Because this is my personal repository, the license you receive to my code is from me and not from my employer (Facebook).
