@@ -10,8 +10,11 @@ function buildManifest(browser) {
   var manifest = {
     manifest_version: 2,
     name: "Calm New Tab",
+    author: "Brendan Viscomi",
     version: "0.1",
-    description: "Simple extension to replace your new tab page with a relaxing photo.",
+    description: "Replace your new tab page with a relaxing photo. No frills, no tracking, open source.",
+
+    homepage_url: "https://github.com/brendanv/calm-new-tab",
 
     chrome_url_overrides: {
       newtab: "index.html"
@@ -30,9 +33,13 @@ function buildManifest(browser) {
   if (!isChrome) {
     manifest.applications = {
       gecko: {
-        id: "calmtab@exampleID"
+        id: "{ad9acb11-1016-4d4a-bc70-6b3ba7c53981}"
       }
-    }
+    };
+    manifest.developer = {
+      name: "Brendan Viscomi",
+      url: "https://github.com/brendanv/calm-new-tab"
+    };
   }
 
   return manifest;
