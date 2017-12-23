@@ -89,11 +89,8 @@ export default class App extends React.Component<Props, State> {
     if (photoData != null && photoData.type === 'remote' && node != null) {
       const newData = node.getPhotoData();
       if (newData != null) {
-        try {
-          saveToCache(newData);
-        } catch (e) {
-          saveToCache(photoData);
-        }
+        saveToCache(newData)
+          .catch(e => saveToCache(photoData));
       } else {
         saveToCache(photoData);
       }

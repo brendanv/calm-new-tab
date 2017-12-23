@@ -7,6 +7,12 @@ var WebpackExtensionManifestPlugin = require('webpack-extension-manifest-plugin'
 
 function buildManifest(browser) {
   var isChrome = browser == 'chrome';
+
+  var permissions = ['storage'];
+  if (!isChrome) {
+    permissions.push('unlimitedStorage');
+  }
+
   var manifest = {
     manifest_version: 2,
     name: "Calm New Tab",
@@ -25,9 +31,7 @@ function buildManifest(browser) {
       [isChrome ? 'chrome_style' : 'browser_style']: true
     },
 
-    permissions: [
-      "storage"
-    ]
+    permissions: permissions
   };
 
   if (!isChrome) {
