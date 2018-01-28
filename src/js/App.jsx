@@ -35,7 +35,7 @@ const Wrapper = styled.div`
   overflow: hidden;
 `;
 
-const CACHE_TTL = 24 * 60 * 60 * 1000;
+const CACHE_TTL = 8 * 60 * 60 * 1000;
 
 export default class App extends React.Component<Props, State> {
   photoNode: ?any = null;
