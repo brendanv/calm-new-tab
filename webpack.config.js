@@ -18,7 +18,7 @@ function buildManifest(browser) {
     name: "Calm New Tab",
     short_name: "Calm",
     author: "Brendan Viscomi",
-    version: "0.1",
+    version: "0.1.1",
     description: "Replace your new tab page with a relaxing photo. No frills, no tracking, open source.",
 
     homepage_url: "https://github.com/brendanv/calm-new-tab",
