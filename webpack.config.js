@@ -39,7 +39,19 @@ function buildManifest(browser) {
       '32': 'icons/icon32.png',
       '48': 'icons/icon48.png',
       '128': 'icons/icon128.png',
-    }
+    },
+
+    browser_action: {
+      default_title: 'Calm New Tab',
+      default_icon: {
+        '16': 'icons/icon16.png',
+        '32': 'icons/icon32.png',
+      },
+    },
+
+    background: {
+      scripts: ['background.js'],
+    },
   };
 
   if (!isChrome) {
@@ -52,6 +64,8 @@ function buildManifest(browser) {
       name: "Brendan Viscomi",
       url: "https://github.com/brendanv/calm-new-tab"
     };
+  } else {
+    manifest.background.persistent = false;
   }
 
   return manifest;
@@ -87,10 +101,10 @@ function getConfig(browser) {
           base: buildManifest(browser)
         }
       }),
-      new CopyWebpackPlugin([{
-        from: 'icons',
-        to: 'icons',
-      }]),
+      new CopyWebpackPlugin([
+        { from: 'icons', to: 'icons' },
+        { from: 'background.js' },
+      ]),
     ],
     module: {
       rules: [
