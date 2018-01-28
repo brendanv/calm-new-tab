@@ -1,6 +1,6 @@
 // @flow
 
-import {getAllSettings, saveSettings} from './Settings';
+import {bumpSettingsVersion, getAllSettings, saveSettings} from './Settings';
 import {clearPhotoCache} from './cachingShared';
 import {getCurrentDateDisplay, getCurrentTimeDisplay} from './timeFormatting';
 import React from 'react';
@@ -54,6 +54,7 @@ export default class OptionsApp extends React.Component<Props, State> {
     if (saved != null) {
       this.setState(saved);
     }
+    await bumpSettingsVersion();
   }
 
   _onSave = async () => {

@@ -11,7 +11,7 @@ import Time from './Time';
 
 import {getPhotoDataFromCache, saveToCache} from './cachingShared';
 import {getRandomPhoto} from './unsplash';
-import {getSetting} from './Settings';
+import {getAllSettings, SETTINGS_VERSION} from './Settings';
 
 type Props = {};
 
@@ -19,6 +19,7 @@ type State = {
   photoData: ?PhotoData,
   timeFormat: ?string,
   settingsLoaded: boolean,
+  showSettingsNotif: boolean,
   imageLoaded: boolean,
 };
 
@@ -45,13 +46,17 @@ export default class App extends React.Component<Props, State> {
       photoData: null,
       timeFormat: null,
       settingsLoaded: false,
+      showSettingsNotif: false,
       imageLoaded: false,
     };
   }
 
   async componentWillMount() {
-    const timeFormat = await getSetting('timeFormat');
-    const newState = ({ settingsLoaded: true }: {[key: string]: any});
+    const {timeFormat, VERSION: settingsVersion} = await getAllSettings();
+    const newState = ({
+      settingsLoaded: true,
+      showSettingsNotif: settingsVersion == null || settingsVersion < SETTINGS_VERSION,
+    }: {[key: string]: any});
     switch (timeFormat) {
       case '24hr':
         newState.timeFormat = '24hr';
@@ -102,6 +107,7 @@ export default class App extends React.Component<Props, State> {
       imageLoaded,
       photoData,
       settingsLoaded,
+      showSettingsNotif,
       timeFormat,
     } = this.state;
     if (photoData == null) {
@@ -116,7 +122,7 @@ export default class App extends React.Component<Props, State> {
         />
         <Time timeFormat={timeFormat} />
         <Attribution photo={photoData} />
-        <OptionsOverlay />
+        <OptionsOverlay showNotif={showSettingsNotif} />
       </Wrapper>
     );
   }
