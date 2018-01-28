@@ -44,7 +44,13 @@ async function getPhotoDataFromCache(): Promise<?PhotoData> {
   return null;
 }
 
+async function clearPhotoCache(): Promise<void> {
+  const storage = await waitForStorage();
+  await storage.removeItem(STORAGE_KEY);
+}
+
 module.exports = {
+  clearPhotoCache,
   saveToCache,
   getPhotoDataFromCache,
 };

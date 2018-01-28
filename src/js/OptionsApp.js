@@ -1,6 +1,7 @@
 // @flow
 
 import {getAllSettings, saveSettings} from './Settings';
+import {clearPhotoCache} from './cachingShared';
 import {getCurrentDateDisplay, getCurrentTimeDisplay} from './timeFormatting';
 import React from 'react';
 import {RadioGroup, Radio} from 'react-radio-group';
@@ -109,7 +110,10 @@ export default class OptionsApp extends React.Component<Props, State> {
     this.setState({ timeFormat }, this._onSave);
   };
 
-  _onCollectionsChange = (collections: Array<string>) => {
+  _onCollectionsChange = async (collections: Array<string>) => {
+    if (collections.length !== this.state.collections.length) {
+      await clearPhotoCache();
+    }
     this.setState({ collections }, this._onSave);
   };
 }
