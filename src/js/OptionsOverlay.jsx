@@ -15,11 +15,26 @@ const OptionsOverlay = Overlay.withComponent('div').extend`
   text-align: right;
 `;
 
-const Options = () => {
+const Notification = styled.div`
+  position: absolute;
+  top: -2px;
+  left: -10px;
+  width: 8px;
+  height: 8px;
+  background: red;
+  border-radius: 50%;
+  box-shadow: 0 0 10px black;
+`;
+
+const Options = (props: {showNotif: boolean}) => {
+  const notif = props.showNotif ? <Notification /> : null;
   return (
     <OptionsOverlay>
       <OverlayText>
-        <a onClick={openOptions} href="#">Settings</a>
+        <a onClick={openOptions} href="#">
+          Settings
+          {notif}
+        </a>
       </OverlayText>
     </OptionsOverlay>
   );
