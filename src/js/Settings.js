@@ -28,17 +28,17 @@ function waitForStorage(): Promise<localForageInstance> {
 }
 
 
-async function saveSettings(settings: {[key: string]: string}): Promise<void> {
+async function saveSettings(settings: {[key: string]: any}): Promise<void> {
   const storage = await waitForStorage();
   await storage.setItem(SETTINGS_KEY, settings);
 }
 
-async function getAllSettings(): Promise<?{[key: string]: string}> {
+async function getAllSettings(): Promise<?{[key: string]: any}> {
   const storage = await waitForStorage();
   return await storage.getItem(SETTINGS_KEY);
 }
 
-async function getSetting(settingName: string): Promise<?string> {
+async function getSetting(settingName: string): Promise<?any> {
   const settings = await getAllSettings();
   if (settings != null) {
     return settings[settingName] || null;

@@ -4,11 +4,14 @@ import {getAllSettings, saveSettings} from './Settings';
 import {getCurrentDateDisplay, getCurrentTimeDisplay} from './timeFormatting';
 import React from 'react';
 import {RadioGroup, Radio} from 'react-radio-group';
+import {CheckboxGroup, Checkbox} from 'react-checkbox-group';
 import styled from 'styled-components';
+import {PEOPLE_COLLECTION_ID, PLACES_COLLECTION_ID, THINGS_COLLECTION_ID} from './unsplash';
 
 type Props = {};
 
 type State = {
+  collections: Array<string>,
   timeFormat: string,
   showSaveNotice: boolean,
 };
@@ -35,6 +38,11 @@ const SavedNotice = styled.div`
 
 export default class OptionsApp extends React.Component<Props, State> {
   state = {
+    collections: [
+      PEOPLE_COLLECTION_ID,
+      PLACES_COLLECTION_ID,
+      THINGS_COLLECTION_ID,
+    ],
     timeFormat: 'default',
     showSaveNotice: false,
   };
@@ -48,7 +56,10 @@ export default class OptionsApp extends React.Component<Props, State> {
   }
 
   _onSave = async () => {
-    await saveSettings({ timeFormat: this.state.timeFormat });
+    await saveSettings({
+      timeFormat: this.state.timeFormat,
+      collections: this.state.collections,
+    });
     this.setState({
       showSaveNotice: true,
     }, this._setHideTimer);
@@ -70,7 +81,7 @@ export default class OptionsApp extends React.Component<Props, State> {
 
 
   render() {
-    const {timeFormat, showSaveNotice} = this.state;
+    const {collections, timeFormat, showSaveNotice} = this.state;
     return (
       <form onSubmit={this._onSave}>
         <h3>Preferred Time Format:</h3>
@@ -79,6 +90,14 @@ export default class OptionsApp extends React.Component<Props, State> {
           <OptionsLabel><Radio value="12hr" />12-hour ({getCurrentTimeDisplay(true)})</OptionsLabel><br />
           <OptionsLabel><Radio value="default" />Default</OptionsLabel><br />
         </RadioGroup>
+        <hr />
+        <h3>Photo Types:</h3>
+        What types of pictures do you want to see on your new tab page?<br /><br />
+        <CheckboxGroup name="time" value={collections} onChange={this._onCollectionsChange}>
+          <OptionsLabel><Checkbox value={PEOPLE_COLLECTION_ID} />People</OptionsLabel><br />
+          <OptionsLabel><Checkbox value={PLACES_COLLECTION_ID} />Places</OptionsLabel><br />
+          <OptionsLabel><Checkbox value={THINGS_COLLECTION_ID} />Things</OptionsLabel><br />
+        </CheckboxGroup>
         <SavedNotice visible={showSaveNotice}>
           <span>{showSaveNotice ? 'Saved!' : ''}</span>
         </SavedNotice>
@@ -88,5 +107,9 @@ export default class OptionsApp extends React.Component<Props, State> {
 
   _onTimeFormatChange = (timeFormat: string) => {
     this.setState({ timeFormat }, this._onSave);
+  };
+
+  _onCollectionsChange = (collections: Array<string>) => {
+    this.setState({ collections }, this._onSave);
   };
 }
