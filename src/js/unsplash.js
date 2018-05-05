@@ -39,6 +39,7 @@ async function getRandomPhoto(): Promise<?PhotoData> {
     height: window.screen.height,
   });
   const json = await toJson(result);
+  unsplash.photos.downloadPhoto(json);
   return {
     type: 'remote',
     src: json.urls.custom,
